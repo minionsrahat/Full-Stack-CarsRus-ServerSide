@@ -104,7 +104,7 @@ async function run() {
             const singleCar = await carsdata.findOne(filter)
             const options = { upsert: true };
             const updateDoc = {
-                $set: {quantity:parseInt(singleCar.quantity)+newQuantity},
+                $set: {quantity:parseInt(singleCar?.quantity)+newQuantity},
             };
             const result = await carsdata.updateOne(filter, updateDoc, options);
             res.send(result)
