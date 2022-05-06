@@ -74,11 +74,19 @@ async function run() {
         })
 
         app.get('/readCarsData', async (req, res) => {
-            const result = await expencess.find({})
+            const limit=req.query.limit
+            let result;
+            if(limit){
+                 result = await expencess.find({}).limit(parseInt(limit))
+            }
+            else{
+                 result = await expencess.find({})
+
+            }
             res.send(await result.toArray())
         })
 
-        app.delete('/deleteExpense/:id',verifyRequest, async (req, res) => {
+        app.delete('/deleteCarData/:id',verifyRequest, async (req, res) => {
            const id=req.params.id
            const query={_id:ObjectId(id)}
            const result=await expencess.deleteOne(query)
@@ -86,7 +94,7 @@ async function run() {
         })
 
 
-        app.put('/updateExpense/:id',verifyRequest, async (req, res) => {
+        app.put('/updateStock/:id',verifyRequest, async (req, res) => {
             const id=req.params.id
             const filter={_id:ObjectId(id)}
             const options = { upsert: true };
