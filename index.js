@@ -3,107 +3,112 @@ const cors = require('cors')
 var jwt = require('jsonwebtoken');
 require('dotenv').config()
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const ObjectId=require('mongodb').ObjectId
+const ObjectId = require('mongodb').ObjectId
 const app = express()
 const port = process.env.PORT || 5000
 
 app.use(cors())
 app.use(express.json())
 
-
-//db user :dbuser
-//password: W3IRlcbKKXjWjIxZ
-
-
-
-const uri =`mongodb+srv://${process.env.DB_USER}:${process.env.PASSWORD}@carsrus.9w4iz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.PASSWORD}@carsrus.9w4iz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-const  verifyRequest= (req,res,next)=>{
-       const tokenInfo=req.headers.accesstoken;
-       if(tokenInfo)
-       {
-        const [email,token]=tokenInfo.split(" ")
-        if(email && token)
-        {
-         jwt.verify(token, process.env.ACCESS_TOKEN , function(err, decoded) {
-             if(err)
-             {
-                 res.send({error:'Error Occured'})
-             }
-             else{
-              if(decoded===email)
-              {
-                 next()
-              }
-              else{
-                 res.send({error:'Unathurozied access'})
-              }
-             }
-           });
+const verifyRequest = (req, res, next) => {
+    const tokenInfo = req.headers.accesstoken;
+    if (tokenInfo) {
+        const [email, token] = tokenInfo.split(" ")
+        if (email && token) {
+            jwt.verify(token, process.env.ACCESS_TOKEN, function (err, decoded) {
+                if (err) {
+                    res.send({ error: 'Error Occured' })
+                }
+                else {
+                    if (decoded === email) {
+                        next()
+                    }
+                    else {
+                        res.send({ error: 'Unathurozied access' })
+                    }
+                }
+            });
         }
-       }
-       else{
-            res.send({error:'Unathurozied access'})
-       }
-      
-      
+    }
+    else {
+        res.send({ error: 'Unathurozied access' })
+    }
+
+
 }
 
 async function run() {
     try {
         await client.connect();
         const database = client.db("CarsRUs");
-        const expencess = database.collection("carsdata");
+        const carsdata = database.collection("carsdata");
         console.log('Db connected')
 
 
         // auth
-        app.post('/login',async (req,res)=>{
-            const email=req.body.email
+        app.post('/login', async (req, res) => {
+            const email = req.body.email
             const token = jwt.sign(email, process.env.ACCESS_TOKEN);
-            res.send({token})
+            res.send({ token })
         })
 
 
-        app.post('/addCarsData',verifyRequest, async (req, res) => {
+        app.post('/addCarsData', verifyRequest, async (req, res) => {
             const expense = req.body;
-            const result = await expencess.insertOne(expense)
+            const result = await carsdata.insertOne(expense)
             // console.log("add user :" + user);
             res.send(result)
         })
 
         app.get('/readCarsData', async (req, res) => {
-            const limit=req.query.limit
+            const limit = req.query.limit
             let result;
-            if(limit){
-                 result = await expencess.find({}).limit(parseInt(limit))
+            if (limit) {
+                result = await carsdata.find({}).limit(parseInt(limit))
             }
-            else{
-                 result = await expencess.find({})
+            else {
+                result = await carsdata.find({})
 
             }
             res.send(await result.toArray())
         })
 
-        app.delete('/deleteCarData/:id',verifyRequest, async (req, res) => {
-           const id=req.params.id
-           const query={_id:ObjectId(id)}
-           const result=await expencess.deleteOne(query)
-           res.send(result)
+        app.get('/readSingleCarsData/:id', async (req, res) => {
+
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const result = await carsdata.findOne(query)
+            res.send(result)
         })
 
-
-        app.put('/updateStock/:id',verifyRequest, async (req, res) => {
-            const id=req.params.id
-            const filter={_id:ObjectId(id)}
+        app.put('/deliverCarData/:id', async (req, res) => {
+            const id = req.params.id
+            const filter = { _id: ObjectId(id) }
+            const singleCar = await carsdata.findOne(filter)
             const options = { upsert: true };
             const updateDoc = {
-                $set: req.body,
-              };
-            const result = await expencess.updateOne(filter, updateDoc, options);
+                $set: {quantity:parseInt(singleCar.quantity)-1},
+            };
+            const result = await carsdata.updateOne(filter, updateDoc, options);
             res.send(result)
-         })
+        })
+
+        app.post('/updateStock', async (req, res) => {
+            const id = req.body._id
+            const newQuantity = req.body.stock
+            console.log(req.body);
+            const filter = { _id: ObjectId(id) }
+            const singleCar = await carsdata.findOne(filter)
+            const options = { upsert: true };
+            const updateDoc = {
+                $set: {quantity:parseInt(singleCar.quantity)+newQuantity},
+            };
+            const result = await carsdata.updateOne(filter, updateDoc, options);
+            res.send(result)
+        })
     } finally {
         // await client.close();
     }
