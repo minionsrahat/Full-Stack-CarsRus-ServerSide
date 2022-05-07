@@ -56,9 +56,10 @@ async function run() {
         })
 
 
-        app.post('/addCarsData', verifyRequest, async (req, res) => {
-            const expense = req.body;
-            const result = await carsdata.insertOne(expense)
+        app.post('/addCarsData', async (req, res) => {
+            const newcar = req.body;
+            // console.log(newcar);
+            const result = await carsdata.insertOne(newcar)
             // console.log("add user :" + user);
             res.send(result)
         })
