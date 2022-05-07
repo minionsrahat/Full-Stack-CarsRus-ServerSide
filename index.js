@@ -120,7 +120,7 @@ async function run() {
             res.send(result)
          })
 
-        app.post('/updateStock', async (req, res) => {
+        app.post('/updateStock',verifyRequest, async (req, res) => {
             const id = req.body._id
             const newQuantity = req.body.stock
             console.log(req.body);
