@@ -71,7 +71,7 @@ async function run() {
             if (limit) {
                 result = await carsdata.find({}).limit(parseInt(limit))
             }
-            if (email) {
+            else if (email) {
                 result = await carsdata.find({supplier_name:email})
             }
             else {
