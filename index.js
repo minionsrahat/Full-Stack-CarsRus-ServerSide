@@ -97,6 +97,13 @@ async function run() {
             res.send(result)
         })
 
+        app.delete('/deleteCarData/:id', async (req, res) => {
+            const id=req.params.id
+            const query={_id:ObjectId(id)}
+            const result=await carsdata.deleteOne(query)
+            res.send(result)
+         })
+
         app.post('/updateStock', async (req, res) => {
             const id = req.body._id
             const newQuantity = req.body.stock
