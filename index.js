@@ -20,21 +20,21 @@ const verifyRequest = (req, res, next) => {
         if (email && token) {
             jwt.verify(token, process.env.ACCESS_TOKEN, function (err, decoded) {
                 if (err) {
-                    res.send({ error: 'Error Occured' })
+                    res.send({ error: 'Error Occured!!Unathurozied access' })
                 }
                 else {
                     if (decoded === email) {
                         next()
                     }
                     else {
-                        res.send({ error: 'Unathurozied access' })
+                        res.send({ error: 'Sorry Unathurozied access' })
                     }
                 }
             });
         }
     }
     else {
-        res.send({ error: 'Unathurozied access' })
+        res.send({ error: 'Sorry Unathurozied access' })
     }
 
 
@@ -101,7 +101,7 @@ async function run() {
             res.send(result)
         })
 
-        app.put('/deliverCarData/:id', async (req, res) => {
+        app.put('/deliverCarData/:id',verifyRequest, async (req, res) => {
             const id = req.params.id
             const filter = { _id: ObjectId(id) }
             const singleCar = await carsdata.findOne(filter)
@@ -113,7 +113,7 @@ async function run() {
             res.send(result)
         })
 
-        app.delete('/deleteCarData/:id', async (req, res) => {
+        app.delete('/deleteCarData/:id',verifyRequest, async (req, res) => {
             const id=req.params.id
             const query={_id:ObjectId(id)}
             const result=await carsdata.deleteOne(query)
