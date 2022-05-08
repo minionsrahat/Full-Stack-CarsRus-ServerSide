@@ -67,12 +67,13 @@ async function run() {
         app.get('/readCarsData', async (req, res) => {
             const limit = req.query.limit
             const email = req.query.email
+            console.log(req.query);
             let result;
             if (limit) {
                 result = await carsdata.find({}).limit(parseInt(limit))
             }
             else if (email) {
-                result = await carsdata.find({supplier_name:email})
+                result = await carsdata.find({email:email})
             }
             else {
                 result = await carsdata.find({})
@@ -85,7 +86,7 @@ async function run() {
             const email = req.query.email
             let result;
             if (email) {
-                result = await carsdata.find({supplier_name:email})
+                result = await carsdata.find({email:email})
                 
             }
             res.send(await result.toArray())
