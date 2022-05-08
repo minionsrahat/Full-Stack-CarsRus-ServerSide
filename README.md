@@ -1,16 +1,17 @@
-# Welcome to My Good Doctor Website
+# Welcome to My Cars R Us! Website
 
-Live Site Link: [https://good-doctor-1080a.web.app/](https://good-doctor-1080a.web.app/).
+Live Site Link: [https://cars-r-us-afd67.web.app/](https://cars-r-us-afd67.web.app/).
+
+StackOverflow Question : [https://stackoverflow.com/questions/72158797/how-to-display-a-spinner-when-data-is-loading-from-server-by-fetch-api-in-react] (https://stackoverflow.com/questions/72158797/how-to-display-a-spinner-when-data-is-loading-from-server-by-fetch-api-in-react)
 
 Description:
 
-
-
-
-- Hello, everyone,this a single-page website for an individual doctor. This website contains information on what types of services are provided by the doctor. 
-- The fees of the services . Different plans for access to those services .Alongside details on the background of the doctor
-- First of all i create a  json file for fake service data. Then i developed a custom hook for loading those data.
-- In the custom hook json data are loaded using useEffect hook.When json data are successfully loaded then i display the array using map function.
-- For displaying services in home page i use array.map method.
+- Hello, everyone,this a single-page website for an Car Inventory Management system. This website contains 
+information on what types of cars and how many cars we have. 
+- Using this management system admin can deliver car, add new car and restock car quantity.
+- Every car card contains many information like img, car description,quantity, price, feature etc.
+- First of all i create a  project on mongodb database which is a nosql database. Then i connect my created database with my server.i create number of api for loading data, delete data and update data on mongodb.
+- For displaying cars informaion in home page i call get api from server.
+- For secure all api on server side i use jwt authentication system.
 - For active navigation link i use NavLink component from react router.
-- Technology i used (React, React bootstrap, React Router, React Icon, Bootstrap cdn, React authentication, Firebase Authentication,React firebase hooks )
+- Technology i used (React, React bootstrap, React Router, React Icon, Bootstrap cdn, React authentication, Firebase Authentication,React firebase hooks, jwt )
