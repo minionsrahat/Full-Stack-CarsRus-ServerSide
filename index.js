@@ -51,7 +51,7 @@ async function run() {
         app.post('/login', async (req, res) => {
             const email = req.body.email
             const token = jwt.sign(email, process.env.ACCESS_TOKEN);
-            res.send("{ token }")
+            res.send({ token })
         })
 
 
