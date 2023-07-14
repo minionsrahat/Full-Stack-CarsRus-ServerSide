@@ -47,11 +47,6 @@ async function run() {
         const carsdata = database.collection("carsdata");
         console.log('Db connected')
 
-        // auth
-        app.get('/', (req, res) => {
-            res.send('Hey i am helloo');
-        })
-
         
         app.post('/login', async (req, res) => {
             // const email = req.body.email
