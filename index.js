@@ -47,12 +47,16 @@ async function run() {
         const carsdata = database.collection("carsdata");
         console.log('Db connected')
 
-
         // auth
+        app.get('/', (req, res) => {
+            res.send('Hey i am helloo');
+        })
+
+        
         app.post('/login', async (req, res) => {
-            const email = req.body.email
-            const token = jwt.sign(email, process.env.ACCESS_TOKEN);
-            res.send({ token })
+            // const email = req.body.email
+            // const token = jwt.sign(email, process.env.ACCESS_TOKEN);
+            res.send("{ token }")
         })
 
 
@@ -66,6 +70,7 @@ async function run() {
 
         app.get('/readCarsData', async (req, res) => {
             const limit = req.query.limit
+            console.log("Limit :",limit)
             const email = req.query.email
             console.log(req.query);
             let result;
@@ -95,7 +100,6 @@ async function run() {
        
 
         app.get('/readSingleCarsData/:id', async (req, res) => {
-
             const id = req.params.id
             const query = { _id: ObjectId(id) }
             const result = await carsdata.findOne(query)
@@ -142,6 +146,10 @@ run().catch(console.dir);
 
 app.get('/', (req, res) => {
     res.send('Hey i am from server');
+})
+
+app.get('/hello', (req, res) => {
+    res.send('Hey i am from hello');
 })
 
 app.listen(port, () => {
