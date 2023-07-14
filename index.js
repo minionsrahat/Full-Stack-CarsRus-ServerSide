@@ -64,6 +64,7 @@ async function run() {
         })
 
         app.get('/readCarsData', async (req, res) => {
+            console.log("Hiiiiiiii")
             const limit = req.query.limit
             console.log("Limit :",limit)
             const email = req.query.email
@@ -140,6 +141,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get('/', (req, res) => {
+    console.log("Hiiiiiiii")
     res.send('Hey i am from server');
 })
 
